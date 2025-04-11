@@ -1,17 +1,29 @@
+\connect world
 -- Clue #1: We recently got word that someone fitting Carmen Sandiego's description has been traveling through Southern Europe. She's most likely traveling someplace where she won't be noticed, so find the least populated country in Southern Europe, and we'll start looking for her there.
  
 -- Write SQL query here
-
+-- select population from countries where region = 'Southern Europe';
+-- select name from countries where population = '1000';
+-- or
+select name from countries where region = 'Southern Europe' order by population asc limit 1;
 
 -- Clue #2: Now that we're here, we have insight that Carmen was seen attending language classes in this country's officially recognized language. Check our databases and find out what language is spoken in this country, so we can call in a translator to work with you.
 
 -- Write SQL query here
-
+select code, name from countries where region = 'Southern Europe' order by population asc limit 1;
+select countrycode, language from countrylanguages where countrycode = 'VAT';
 
 -- Clue #3: We have new news on the classes Carmen attended – our gumshoes tell us she's moved on to a different country, a country where people speak only the language she was learning. Find out which nearby country speaks nothing but that language.
 
 -- Write SQL query here
-
+select code, name, population from countries where region = 'Southern Europe' order by population asc; 
+-- select countrycode, language from countrylanguages where countrycode  in ('VAT', 'GIB', 'SMR', 'AND', 'MLT', 'SVN', 'MKD', 'ALB', 'BIH', 'HRV', 'PRT', 'GRC', 'YUG', 'ESP', 'ITA');q
+-- or
+select countrycode, language from countrylanguages group by countrycode, language having count(*) = 1 and max(language) = 'Italian';
+select c1.* from countrylanguages c1
+join (
+    select countrycode from countrylanguages group by countrycode having count(*) = 1 and max(language) = "Italian"
+) filtered on c1.countrycode = filtered.countrycode;
 
 -- Clue #4: We're booking the first flight out – maybe we've actually got a chance to catch her this time. There are only two cities she could be flying to in the country. One is named the same as the country – that would be too obvious. We're following our gut on this one; find out what other city in that country she might be flying to.
 
