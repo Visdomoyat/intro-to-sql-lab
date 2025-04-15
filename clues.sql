@@ -16,14 +16,10 @@ select countrycode, language from countrylanguages where countrycode = 'VAT';
 -- Clue #3: We have new news on the classes Carmen attended – our gumshoes tell us she's moved on to a different country, a country where people speak only the language she was learning. Find out which nearby country speaks nothing but that language.
 
 -- Write SQL query here
-select code, name, population from countries where region = 'Southern Europe' order by population asc; 
--- select countrycode, language from countrylanguages where countrycode  in ('VAT', 'GIB', 'SMR', 'AND', 'MLT', 'SVN', 'MKD', 'ALB', 'BIH', 'HRV', 'PRT', 'GRC', 'YUG', 'ESP', 'ITA');q
--- or
-select countrycode, language from countrylanguages group by countrycode, language having count(*) = 1 and max(language) = 'Italian';
-select c1.* from countrylanguages c1
-join (
-    select countrycode from countrylanguages group by countrycode having count(*) = 1 and max(language) = "Italian"
-) filtered on c1.countrycode = filtered.countrycode;
+select countrycode, language, isofficial, percentage from countrylanguages where isofficial = 't' and language = 'Italian' order by percentage asc limit 10;
+
+
+select name, code from countries where code = 'SMR' or code = 'ITA' and region = 'Southern Europe';
 
 -- Clue #4: We're booking the first flight out – maybe we've actually got a chance to catch her this time. There are only two cities she could be flying to in the country. One is named the same as the country – that would be too obvious. We're following our gut on this one; find out what other city in that country she might be flying to.
 
